@@ -1,0 +1,139 @@
+{
+  "title": "MeetMind Product & Architecture Sync - Q3",
+  "audio_filename": "sample_meeting.wav",
+  "audio_filesize_bytes": 1048576,
+  "audio_duration_seconds": 312.0,
+  "language": "en",
+  "overview": "Cross-functional product alignment discussing AI transcription latency, speaker diarization benchmarks, action item integrity, and multi-format export capabilities.",
+  "executive_summary": "The team aligned on the core architecture for MeetMind. Whisper API with segment timestamps will serve as the primary speech-to-text engine. To prevent hallucination in executive reporting, all unassigned tasks or missing deadlines must strictly default to 'Not specified'. SQLite will serve as the lightweight embedded database for seamless deployment. Elena and Sarah will finalize the UI and audio chunking pipeline ahead of next week's release.",
+  "detailed_summary": "Alex opened the sync by reviewing user feedback from the early alpha testing group. Users praised the speed of meeting summaries but requested clear speaker attribution and professional PDF exports. Sarah explained that meetings over 25MB need transparent chunking or compression to meet API limits without data loss. Marcus presented diarization benchmarks, confirming that segment-based speaker labeling ('Speaker 1', 'Speaker 2') with LLM attribution provides high accuracy without demanding heavy GPU instances. Elena showcased the new SaaS dashboard mockup featuring Dark/Light mode, interactive task cards, and instant CSV/PDF export. The team agreed on strict validation rules: under no circumstances should the model invent attendee names, deadlines, or false consensus.",
+  "key_discussion_points": [
+    {
+      "topic": "Transcription & Audio Chunking",
+      "point_text": "Audio files up to 25MB can be directly processed by Whisper API. Larger recordings will be split into segments with small overlaps to maintain transcription continuity."
+    },
+    {
+      "topic": "Anti-Hallucination Strategy",
+      "point_text": "Meeting summaries and action item extractions must adhere to strict zero-fabrication standards. If an owner or due date is absent from the transcript, 'Not specified' is recorded."
+    },
+    {
+      "topic": "Speaker Diarization Architecture",
+      "point_text": "Adopted a robust segment-level attribution model. Transcripts are segmented into chronological speaker turns with exact start and end timestamps."
+    },
+    {
+      "topic": "Export & Reporting",
+      "point_text": "Integrated ReportLab for executive PDF generation, Pandas for action item CSV download, and raw text export for meeting notes archives."
+    }
+  ],
+  "decisions": [
+    {
+      "decision_text": "Standardize on Whisper API with segment timestamps for speech-to-text conversion.",
+      "context_topic": "Speech Engine",
+      "problem_discussed": "Local Whisper models required excessive memory and caused high latency on consumer machines.",
+      "proposed_solution": "Use cloud Whisper API with fallback mock mode for offline demonstration."
+    },
+    {
+      "decision_text": "Never guess or invent task owners or deadlines; strictly enforce 'Not specified'.",
+      "context_topic": "Data Integrity",
+      "problem_discussed": "Early tests showed LLMs occasionally hallucinating assignees and arbitrary due dates.",
+      "proposed_solution": "Reinforced system prompt instructions and Pydantic schema validation."
+    },
+    {
+      "decision_text": "Use SQLite database for local persistence to enable zero-config deployment.",
+      "context_topic": "Infrastructure",
+      "problem_discussed": "Complex database setups prevent quick adoption on local machines and Replit.",
+      "proposed_solution": "Embedded SQLite database with automated table migration on startup."
+    }
+  ],
+  "action_items": [
+    {
+      "task_description": "Implement audio chunking pipeline with 50MB file validation",
+      "assigned_person": "Sarah Chen",
+      "deadline": "Next Friday",
+      "priority": "High",
+      "status": "In Progress"
+    },
+    {
+      "task_description": "Finalize ReportLab PDF template with company styling and action tables",
+      "assigned_person": "Elena Rostova",
+      "deadline": "Wednesday 5 PM",
+      "priority": "High",
+      "status": "Completed"
+    },
+    {
+      "task_description": "Fine-tune speaker turn segmentation prompts and confidence checks",
+      "assigned_person": "Marcus Vance",
+      "deadline": "End of sprint",
+      "priority": "Medium",
+      "status": "Pending"
+    },
+    {
+      "task_description": "Prepare user onboarding guide and Replit 1-click launch documentation",
+      "assigned_person": "Alex Turner",
+      "deadline": "Not specified",
+      "priority": "Low",
+      "status": "Pending"
+    }
+  ],
+  "unresolved_questions": [
+    "Should we offer real-time streaming audio transcription in future releases?",
+    "Do enterprise clients require self-hosted Whisper on dedicated Kubernetes clusters?"
+  ],
+  "next_steps": [
+    "Execute comprehensive end-to-end testing with audio files up to 50MB.",
+    "Ship the v1.0.0 release candidate to alpha testers for final approval."
+  ],
+  "transcript": {
+    "text": "Speaker 1 (Alex): Good morning team. Let's get right into our Q3 architecture sync. Our main goal today is finalizing the speech processing pipeline and meeting report generation for MeetMind. Sarah, how are we looking on the transcription side?\nSpeaker 2 (Sarah): Thanks Alex. We tested the Whisper API across WAV, MP3, and M4A formats. The turnaround is remarkably fast—under 10 seconds for a five-minute audio clip. The only constraint is the 25 megabyte upload limit per request. I propose we add an automatic chunking module for larger meetings.\nSpeaker 3 (Marcus): I agree with Sarah. On the diarization side, we tested segment timestamps combined with conversational attribution. By labeling turns as Speaker 1, Speaker 2, and so forth, we maintain full privacy and avoid guessing real identities unless explicitly spoken.\nSpeaker 1 (Alex): That's crucial. And regarding action items, we must ensure zero hallucination. If someone mentions an idea without an assigned person or deadline, the report must say 'Not specified'. Never invent names or dates.\nSpeaker 4 (Elena): Exactly. I've designed the UI dashboard in Streamlit with high-contrast cards, dark and light theme adaptability, and instant export to PDF, CSV, and text. I'll have the ReportLab PDF template ready by Wednesday 5 PM.\nSpeaker 2 (Sarah): Excellent Elena. I'll take the task of implementing the chunking pipeline and file validation. I will have that ready by next Friday.\nSpeaker 3 (Marcus): And I will fine-tune the speaker segmentation prompts before the end of the current sprint.\nSpeaker 1 (Alex): Outstanding progress everyone. I'll compile our documentation and launch guide. Let's reconvene on Monday for the demo.",
+    "segments": [
+      {
+        "speaker": "Speaker 1",
+        "start": 0.0,
+        "end": 14.5,
+        "text": "Good morning team. Let's get right into our Q3 architecture sync. Our main goal today is finalizing the speech processing pipeline and meeting report generation for MeetMind. Sarah, how are we looking on the transcription side?"
+      },
+      {
+        "speaker": "Speaker 2",
+        "start": 14.8,
+        "end": 32.2,
+        "text": "Thanks Alex. We tested the Whisper API across WAV, MP3, and M4A formats. The turnaround is remarkably fast—under 10 seconds for a five-minute audio clip. The only constraint is the 25 megabyte upload limit per request. I propose we add an automatic chunking module for larger meetings."
+      },
+      {
+        "speaker": "Speaker 3",
+        "start": 32.5,
+        "end": 49.0,
+        "text": "I agree with Sarah. On the diarization side, we tested segment timestamps combined with conversational attribution. By labeling turns as Speaker 1, Speaker 2, and so forth, we maintain full privacy and avoid guessing real identities unless explicitly spoken."
+      },
+      {
+        "speaker": "Speaker 1",
+        "start": 49.2,
+        "end": 63.8,
+        "text": "That's crucial. And regarding action items, we must ensure zero hallucination. If someone mentions an idea without an assigned person or deadline, the report must say 'Not specified'. Never invent names or dates."
+      },
+      {
+        "speaker": "Speaker 4",
+        "start": 64.0,
+        "end": 78.5,
+        "text": "Exactly. I've designed the UI dashboard in Streamlit with high-contrast cards, dark and light theme adaptability, and instant export to PDF, CSV, and text. I'll have the ReportLab PDF template ready by Wednesday 5 PM."
+      },
+      {
+        "speaker": "Speaker 2",
+        "start": 78.8,
+        "end": 91.2,
+        "text": "Excellent Elena. I'll take the task of implementing the chunking pipeline and file validation. I will have that ready by next Friday."
+      },
+      {
+        "speaker": "Speaker 3",
+        "start": 91.5,
+        "end": 103.0,
+        "text": "And I will fine-tune the speaker segmentation prompts before the end of the current sprint."
+      },
+      {
+        "speaker": "Speaker 1",
+        "start": 103.3,
+        "end": 115.0,
+        "text": "Outstanding progress everyone. I'll compile our documentation and launch guide. Let's reconvene on Monday for the demo."
+      }
+    ]
+  }
+}

@@ -1,0 +1,25 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+env/
+venv/
+.venv/
+ENV/
+
+# Streamlit
+.streamlit/
+
+# Database & Uploads
+data/
+*.db
+*.sqlite3
+
+# Environment Variables
+.env
+
+# OS specific
+.DS_Store
+Thumbs.db
